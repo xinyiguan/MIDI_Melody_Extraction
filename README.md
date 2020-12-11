@@ -5,7 +5,7 @@ This repository contains the code for extracting the melodic line from the MIDI 
 Refer to the Jupyter Notebook `MIDI_MelodyExtractionTutorial.ipynb` for usage tutorial. 
 The tutorial contains codes and instructions for single and batch extraction. 
 
-##### Library dependency: 
+#### Library dependency: 
 - mido
 - numpy
 
