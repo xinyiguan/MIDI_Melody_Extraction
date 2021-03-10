@@ -1,6 +1,9 @@
 import mido
 import copy
+import os
+import shutil
 
+## Module 1: extracting the upper line with mido:
 
 def get_note(msg):
     dict = msg.dict()
@@ -76,3 +79,42 @@ def midi_file_melody_only(midi_file_path):
     midi_file.tracks[0] = resulted_track
 
     return midi_file
+
+## Module 2: Starting the output:
+
+### 2.1: MIDI file -> MIDI file (melody only):
+def process(input_file_path,output_path):
+    result = midi_file_melody_only(input_file_path)
+    input_name = result.filename
+    output_name = 'melody_only_'+ input_name
+    result.save(output_path + output_name)
+
+### 2.2: Folder of MIDI files -> Folder of MIDI files (melody only):
+def find_name(string):
+    index = string.rfind('/')
+    return string[index + 1:]
+
+def batch_process(input_folder_path, output_path):
+    output_folder_name = 'melody_only_' + find_name(input_folder_path)
+    output_folder_path = output_path + output_folder_name
+
+    if os.path.exists(output_folder_path + '/'):
+        shutil.rmtree(output_folder_path + '/')
+    os.makedirs(output_folder_path + '/')
+
+    for files in os.listdir(input_folder_path):
+        input_file_path = input_folder_path + '/' + files
+        input_file_name = find_name(input_file_path)
+        result = midi_file_melody_only(input_file_path)
+        result.filename = 'melody_only_' + input_file_name
+        result.save(output_folder_path + '/' + result.filename)
+
+
+## Module 3: Run this script
+
+if __name__ == '__main__':
+    input_folder_path = 'sample_MIDIs'
+    output_path = './'
+    batch_process(input_folder_path, output_path)
+    print('Finished processing!')
+
